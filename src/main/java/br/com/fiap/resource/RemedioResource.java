@@ -2,10 +2,8 @@ package br.com.fiap.resource;
 
 import br.com.fiap.bo.RemedioBO;
 import br.com.fiap.to.RemedioTO;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -44,5 +42,19 @@ public class RemedioResource {
         response.entity(resultado);
         return response.build();
 
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response save(@Valid RemedioTO remedio){
+        RemedioTO resultado = remedioBO.save(remedio);
+        Response.ResponseBuilder response = null;
+        if (resultado != null){
+            response = Response.created(null); // 201 - CREATED
+        } else {
+            response = Response.status(400); // 400 - BAD REQUEST
+        }
+        response.entity(resultado);
+        return response.build();
     }
 }
