@@ -77,4 +77,40 @@ public class RemedioDAO extends Repository{
         }
         return null;
     }
+
+    public boolean delete(Long codigo){
+        String sql = "delete from ddd_remedios where codigo = ?";
+        try(PreparedStatement ps = getConnection().prepareStatement(sql)){
+            ps.setLong(1, codigo);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return false;
+    }
+
+    public RemedioTO edit (Long codigo, RemedioTO remedio){
+        String sql = "update ddd_remedios set nome = ?, preco = ?, data_de_fabricacao = ?, data_de_validade = ? where" +
+                " codigo = ?";
+        try(PreparedStatement ps = getConnection().prepareStatement(sql)){
+            ps.setLong(5, codigo);
+            ps.setString(1, remedio.getNome());
+            ps.setDouble(2, remedio.getPreco());
+            ps.setDate(3, Date.valueOf(remedio.getDataDeFabricacao()));
+            ps.setDate(4, Date.valueOf(remedio.getDataDeValidade()));
+            remedio.setCodigo(codigo);
+
+            if (ps.executeUpdate() > 0){
+                return remedio;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao editar: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
 }
