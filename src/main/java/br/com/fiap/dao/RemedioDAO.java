@@ -1,7 +1,6 @@
 package br.com.fiap.dao;
 
 import br.com.fiap.to.RemedioTO;
-import com.mysql.cj.xdevapi.PreparableStatement;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -61,7 +60,7 @@ public class RemedioDAO extends Repository{
         return remedio;
     }
     public RemedioTO save(RemedioTO remedio){
-        String sql = "insert into ddd_remedios (codigo, nome, preco, data_de_fabricacao, data_de_validade) values (null, ?, ?, ?, ?)";
+        String sql = "insert into ddd_remedios (nome, preco, data_de_fabricacao, data_de_validade) values (?, ?, ?, ?)";
         try(PreparedStatement ps = getConnection().prepareStatement(sql)){
             ps.setString(1, remedio.getNome());
             ps.setDouble(2, remedio.getPreco());
